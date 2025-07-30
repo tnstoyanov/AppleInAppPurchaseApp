@@ -27,35 +27,35 @@ interface PremiumPackage extends Product {
 }
 
 const PREMIUM_PRODUCT_IDS = [
-  'com.yourcompany.appleiapapp.beginner',
-  'com.yourcompany.appleiapapp.intermediate',
-  'com.yourcompany.appleiapapp.trader',
-  'com.yourcompany.appleiapapp.elite',
-  'com.yourcompany.appleiapapp.expert',
+  'com.tiebreak.appleiapapp.beginner',
+  'com.tiebreak.appleiapapp.intermediate',
+  'com.tiebreak.appleiapapp.trader',
+  'com.tiebreak.appleiapapp.elite',
+  'com.tiebreak.appleiapapp.expert',
 ];
 
 const PACKAGE_INFO = {
-  'com.yourapp.beginner': {
+  'com.tiebreak.appleiapapp.beginner': {
     title: 'Beginner',
     description: 'Perfect for getting started',
     features: ['Basic analytics', 'Email support', 'Mobile access'],
   },
-  'com.yourapp.intermediate': {
+  'com.tiebreak.appleiapapp.intermediate': {
     title: 'Intermediate',
     description: 'Enhanced features for growing users',
     features: ['Advanced analytics', 'Priority support', 'API access', 'Custom reports'],
   },
-  'com.yourapp.trader': {
+  'com.tiebreak.appleiapapp.trader': {
     title: 'Trader',
     description: 'Professional tools for active traders',
     features: ['Real-time data', 'Advanced charts', 'Trading signals', 'Portfolio management'],
   },
-  'com.yourapp.elite': {
+  'com.tiebreak.appleiapapp.elite': {
     title: 'Elite',
     description: 'Premium experience for serious investors',
     features: ['Exclusive insights', 'Personal advisor', 'Premium alerts', 'Advanced tools'],
   },
-  'com.yourapp.expert': {
+  'com.tiebreak.appleiapapp.expert': {
     title: 'Expert',
     description: 'Ultimate package for professionals',
     features: ['All Elite features', 'White-label options', 'API integration', 'Custom development'],
