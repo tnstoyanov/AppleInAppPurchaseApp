@@ -1,0 +1,147 @@
+{
+  "identifier" : "F7A5B8C9-1234-5678-9ABC-DEF012345678",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "200.00",
+      "familyShareable" : false,
+      "identifier" : "com.yourapp.beginner",
+      "localizations" : [
+        {
+          "description" : "Perfect for getting started with basic analytics and email support",
+          "displayName" : "Beginner Package",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.yourapp.beginner",
+      "referenceName" : "Beginner Package",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "450.00",
+      "familyShareable" : false,
+      "identifier" : "com.yourapp.intermediate",
+      "localizations" : [
+        {
+          "description" : "Enhanced features for growing users with advanced analytics and priority support",
+          "displayName" : "Intermediate Package",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.yourapp.intermediate",
+      "referenceName" : "Intermediate Package",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "750.00",
+      "familyShareable" : false,
+      "identifier" : "com.yourapp.trader",
+      "localizations" : [
+        {
+          "description" : "Professional tools for active traders with real-time data and advanced charts",
+          "displayName" : "Trader Package",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.yourapp.trader",
+      "referenceName" : "Trader Package",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "1000.00",
+      "familyShareable" : false,
+      "identifier" : "com.yourapp.elite",
+      "localizations" : [
+        {
+          "description" : "Premium experience for serious investors with exclusive insights and personal advisor",
+          "displayName" : "Elite Package",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.yourapp.elite",
+      "referenceName" : "Elite Package",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "1500.00",
+      "familyShareable" : false,
+      "identifier" : "com.yourapp.expert",
+      "localizations" : [
+        {
+          "description" : "Ultimate package for professionals with all Elite features plus white-label options",
+          "displayName" : "Expert Package",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.yourapp.expert",
+      "referenceName" : "Expert Package",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6478264139",
+    "_billingGracePeriodCutoffInterval" : "",
+    "_developerTeamID" : "YOUR_TEAM_ID_HERE",
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : "2025-07-30T10:20:00Z",
+    "_locale" : "en_US",
+    "_rateLimitingEnabled" : false,
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ]
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}
