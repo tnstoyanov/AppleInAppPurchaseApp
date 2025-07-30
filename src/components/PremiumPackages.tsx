@@ -27,11 +27,11 @@ interface PremiumPackage extends Product {
 }
 
 const PREMIUM_PRODUCT_IDS = [
-  'com.yourapp.beginner',
-  'com.yourapp.intermediate',
-  'com.yourapp.trader',
-  'com.yourapp.elite',
-  'com.yourapp.expert',
+  'com.yourcompany.appleiapapp.beginner',
+  'com.yourcompany.appleiapapp.intermediate',
+  'com.yourcompany.appleiapapp.trader',
+  'com.yourcompany.appleiapapp.elite',
+  'com.yourcompany.appleiapapp.expert',
 ];
 
 const PACKAGE_INFO = {
