@@ -78,24 +78,38 @@ export const PremiumPackages: React.FC = () => {
 
   const initializeIAP = async () => {
     try {
-      console.log('Starting IAP initialization...');
+      console.log('=== IAP INITIALIZATION START ===');
       console.log('Product IDs to fetch:', PREMIUM_PRODUCT_IDS);
       console.log('Bundle ID should be: com.tiebreak.appleiapapp');
+      console.log('Current environment: sandbox (should be sandbox for testing)');
       
       // Initialize connection to App Store
-      await initConnection();
+      console.log('Initializing connection to App Store...');
+      const connectionResult = await initConnection();
+      console.log('IAP connection result:', connectionResult);
       console.log('IAP connection initialized successfully');
 
       // Get product information from App Store
+      console.log('Fetching products from App Store...');
+      console.log('Requesting products with SKUs:', PREMIUM_PRODUCT_IDS);
+      
       const productList = await getProducts({ skus: PREMIUM_PRODUCT_IDS });
-      console.log('Products fetched from App Store:', productList);
+      console.log('=== PRODUCT FETCH RESULT ===');
+      console.log('Raw products fetched from App Store:', JSON.stringify(productList, null, 2));
       console.log('Number of products returned:', productList.length);
-
+      
       if (productList.length === 0) {
+        console.error('=== NO PRODUCTS ERROR ===');
         console.error('No products returned from App Store');
+        console.error('This usually means:');
+        console.error('1. Product IDs dont match exactly');
+        console.error('2. Products are not "Ready to Submit" in App Store Connect');
+        console.error('3. Bundle ID mismatch');
+        console.error('4. Not signed in with sandbox user');
+        
         Alert.alert(
           'No Products Available', 
-          'In-app purchases are not available. Please check:\n\n1. In-App Purchases are "Ready to Submit" in App Store Connect\n2. Bundle ID matches exactly\n3. Product IDs are correct'
+          'In-app purchases are not available. Please check:\n\n1. In-App Purchases are "Ready to Submit" in App Store Connect\n2. Bundle ID matches exactly\n3. Product IDs are correct\n4. Signed in with sandbox test user'
         );
         setLoading(false);
         return;
@@ -103,18 +117,22 @@ export const PremiumPackages: React.FC = () => {
 
       // Enhance products with additional info
       const enhancedProducts: PremiumPackage[] = productList.map(product => {
-        console.log('Processing product:', product.productId, product.localizedPrice);
+        console.log('Processing product:', product.productId, 'Price:', product.localizedPrice, 'Currency:', product.currency);
         return {
           ...product,
           ...PACKAGE_INFO[product.productId as keyof typeof PACKAGE_INFO],
         };
       });
 
-      console.log('Enhanced products:', enhancedProducts);
+      console.log('=== ENHANCED PRODUCTS ===');
+      console.log('Enhanced products:', JSON.stringify(enhancedProducts, null, 2));
       setProducts(enhancedProducts);
       setLoading(false);
+      console.log('=== IAP INITIALIZATION SUCCESS ===');
     } catch (error) {
+      console.error('=== IAP INITIALIZATION ERROR ===');
       console.error('Error initializing IAP:', error);
+      console.error('Error details:', JSON.stringify(error, null, 2));
       Alert.alert(
         'IAP Error', 
         `Failed to load premium packages: ${(error as Error)?.message || String(error)}`
@@ -228,6 +246,8 @@ export const PremiumPackages: React.FC = () => {
             {'\n'}• In-App Purchases are "Ready to Submit" in App Store Connect
             {'\n'}• Bundle ID matches exactly: com.tiebreak.appleiapapp
             {'\n'}• You're signed in with a sandbox test user
+            {'\n'}• Try running from Xcode instead of TestFlight
+            {'\n'}• Check Xcode console for detailed error logs
           </Text>
           <TouchableOpacity 
             style={styles.retryButton}
