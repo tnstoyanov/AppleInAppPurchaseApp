@@ -77,25 +77,46 @@ export const PremiumPackages: React.FC = () => {
 
   const initializeIAP = async () => {
     try {
+      console.log('Starting IAP initialization...');
+      console.log('Product IDs to fetch:', PREMIUM_PRODUCT_IDS);
+      
       // Initialize connection to App Store
       await initConnection();
-      console.log('IAP connection initialized');
+      console.log('IAP connection initialized successfully');
 
       // Get product information from App Store
       const productList = await getProducts({ skus: PREMIUM_PRODUCT_IDS });
-      console.log('Products fetched:', productList);
+      console.log('Products fetched from App Store:', productList);
+      console.log('Number of products returned:', productList.length);
+
+      if (productList.length === 0) {
+        console.error('No products returned from App Store');
+        Alert.alert(
+          'No Products Available', 
+          'In-app purchases are not available. Please check:\n\n1. In-App Purchases are "Ready to Submit" in App Store Connect\n2. Bundle ID matches exactly\n3. Product IDs are correct'
+        );
+        setLoading(false);
+        return;
+      }
 
       // Enhance products with additional info
-      const enhancedProducts: PremiumPackage[] = productList.map(product => ({
-        ...product,
-        ...PACKAGE_INFO[product.productId as keyof typeof PACKAGE_INFO],
-      }));
+      const enhancedProducts: PremiumPackage[] = productList.map(product => {
+        console.log('Processing product:', product.productId, product.localizedPrice);
+        return {
+          ...product,
+          ...PACKAGE_INFO[product.productId as keyof typeof PACKAGE_INFO],
+        };
+      });
 
+      console.log('Enhanced products:', enhancedProducts);
       setProducts(enhancedProducts);
       setLoading(false);
     } catch (error) {
       console.error('Error initializing IAP:', error);
-      Alert.alert('Error', 'Failed to load premium packages');
+      Alert.alert(
+        'IAP Error', 
+        `Failed to load premium packages: ${(error as Error)?.message || String(error)}`
+      );
       setLoading(false);
     }
   };
@@ -195,6 +216,28 @@ export const PremiumPackages: React.FC = () => {
       <Text style={styles.subtitle}>
         Choose the perfect package to unlock premium features
       </Text>
+
+      {products.length === 0 && !loading && (
+        <View style={styles.noProductsContainer}>
+          <Text style={styles.noProductsTitle}>No Products Available</Text>
+          <Text style={styles.noProductsText}>
+            In-app purchases are not currently available.{'\n\n'}
+            Please check:
+            {'\n'}• In-App Purchases are "Ready to Submit" in App Store Connect
+            {'\n'}• Bundle ID matches exactly: com.tiebreak.appleiapapp
+            {'\n'}• You're signed in with a sandbox test user
+          </Text>
+          <TouchableOpacity 
+            style={styles.retryButton}
+            onPress={() => {
+              setLoading(true);
+              initializeIAP();
+            }}
+          >
+            <Text style={styles.retryButtonText}>Retry</Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
       {products.map((product) => {
         const isPurchased = purchasedPackages.has(product.productId);
@@ -335,6 +378,49 @@ const styles = StyleSheet.create({
     backgroundColor: '#6c757d',
   },
   purchaseButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  noProductsContainer: {
+    backgroundColor: 'white',
+    borderRadius: 12,
+    padding: 24,
+    marginBottom: 16,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  noProductsTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#dc3545',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  noProductsText: {
+    fontSize: 16,
+    color: '#6c757d',
+    textAlign: 'center',
+    lineHeight: 22,
+    marginBottom: 20,
+  },
+  retryButton: {
+    backgroundColor: '#007AFF',
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 48,
+  },
+  retryButtonText: {
     color: 'white',
     fontSize: 16,
     fontWeight: '600',
