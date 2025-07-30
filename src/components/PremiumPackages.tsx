@@ -27,35 +27,35 @@ interface PremiumPackage extends Product {
 }
 
 const PREMIUM_PRODUCT_IDS = [
-  'com.tiebreak.appleiapapp.beginner',
-  'com.tiebreak.appleiapapp.intermediate',
-  'com.tiebreak.appleiapapp.trader',
-  'com.tiebreak.appleiapapp.elite',
-  'com.tiebreak.appleiapapp.expert',
+  'com.appleiapapp.beginner',
+  'com.appleiapapp.intermediate',
+  'com.appleiapapp.trader',
+  'com.appleiapapp.elite',
+  'com.appleiapapp.expert',
 ];
 
 const PACKAGE_INFO = {
-  'com.tiebreak.appleiapapp.beginner': {
+  'com.appleiapapp.beginner': {
     title: 'Beginner',
     description: 'Perfect for getting started',
     features: ['Basic analytics', 'Email support', 'Mobile access'],
   },
-  'com.tiebreak.appleiapapp.intermediate': {
+  'com.appleiapapp.intermediate': {
     title: 'Intermediate',
     description: 'Enhanced features for growing users',
     features: ['Advanced analytics', 'Priority support', 'API access', 'Custom reports'],
   },
-  'com.tiebreak.appleiapapp.trader': {
+  'com.appleiapapp.trader': {
     title: 'Trader',
     description: 'Professional tools for active traders',
     features: ['Real-time data', 'Advanced charts', 'Trading signals', 'Portfolio management'],
   },
-  'com.tiebreak.appleiapapp.elite': {
+  'com.appleiapapp.elite': {
     title: 'Elite',
     description: 'Premium experience for serious investors',
     features: ['Exclusive insights', 'Personal advisor', 'Premium alerts', 'Advanced tools'],
   },
-  'com.tiebreak.appleiapapp.expert': {
+  'com.appleiapapp.expert': {
     title: 'Expert',
     description: 'Ultimate package for professionals',
     features: ['All Elite features', 'White-label options', 'API integration', 'Custom development'],
@@ -80,7 +80,7 @@ export const PremiumPackages: React.FC = () => {
     try {
       console.log('Starting IAP initialization...');
       console.log('Product IDs to fetch:', PREMIUM_PRODUCT_IDS);
-      console.log('Bundle ID should be: com.tiebreak.appleiapapp');
+      console.log('Bundle ID should be: com.appleiapapp');
       
       // Initialize connection to App Store
       await initConnection();
@@ -226,7 +226,7 @@ export const PremiumPackages: React.FC = () => {
             In-app purchases are not currently available.{'\n\n'}
             Please check:
             {'\n'}• In-App Purchases are "Ready to Submit" in App Store Connect
-            {'\n'}• Bundle ID matches exactly: com.tiebreak.appleiapapp
+            {'\n'}• Bundle ID matches exactly: com.appleiapapp
             {'\n'}• You're signed in with a sandbox test user
           </Text>
           <TouchableOpacity 
