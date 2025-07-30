@@ -69,6 +69,7 @@ export const PremiumPackages: React.FC = () => {
   const [purchasedPackages, setPurchasedPackages] = useState<Set<string>>(new Set());
 
   useEffect(() => {
+    console.log('PremiumPackages component mounted');
     initializeIAP();
     return () => {
       // Clean up listeners
@@ -79,6 +80,7 @@ export const PremiumPackages: React.FC = () => {
     try {
       console.log('Starting IAP initialization...');
       console.log('Product IDs to fetch:', PREMIUM_PRODUCT_IDS);
+      console.log('Bundle ID should be: com.tiebreak.appleiapapp');
       
       // Initialize connection to App Store
       await initConnection();
