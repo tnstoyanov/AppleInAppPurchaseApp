@@ -70,8 +70,22 @@ export const PremiumPackages: React.FC = () => {
   const [purchasedPackages, setPurchasedPackages] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    console.log('PremiumPackages component mounted');
-    initializeIAP();
+    // For mock/test mode, always show the mock product
+    setProducts([
+      {
+        productId: 'com.tiebreak.appleiapapp.beginner',
+        title: 'Beginner (Mock)',
+        price: '200.00',
+        localizedPrice: '€200.00',
+        currency: 'EUR',
+        description: 'Perfect for getting started',
+        features: ['Basic analytics', 'Email support', 'Mobile access'],
+        type: 'inapp', // Added to satisfy Product interface
+      },
+    ]);
+    setLoading(false);
+    // Comment out real IAP init for mock mode
+    // initializeIAP();
     return () => {
       // Clean up listeners
     };
@@ -214,58 +228,26 @@ export const PremiumPackages: React.FC = () => {
   const handlePurchase = async (productId: string) => {
     try {
       setPurchasing(productId);
-      
-      // Set up purchase listeners
-      const purchaseUpdateSubscription = purchaseUpdatedListener(
-        async (purchase: Purchase) => {
-          console.log('Purchase updated:', purchase);
-          
-          if (purchase.productId === productId) {
-            try {
-              // Verify purchase with your server
-              await verifyPurchaseWithServer(purchase);
-              
-              // Finish the transaction
-              await finishTransaction({ purchase, isConsumable: false });
-              
-              // Update local state
-              setPurchasedPackages(prev => new Set([...prev, productId]));
-              
-              Alert.alert(
-                'Purchase Successful!',
-                'Your premium package has been activated.',
-                [{ text: 'OK' }]
-              );
-            } catch (error) {
-              console.error('Error finishing transaction:', error);
-              Alert.alert('Error', 'Failed to complete purchase');
-            }
-          }
-          
-          setPurchasing(null);
-        }
-      );
-
-      const purchaseErrorSubscription = purchaseErrorListener(
-        (error: any) => {
-          console.error('Purchase error:', error);
-          Alert.alert('Purchase Failed', error.message || 'An error occurred during purchase');
-          setPurchasing(null);
-        }
-      );
-
-      // Request purchase
-      await requestPurchase({ sku: productId });
-
-      // Clean up listeners after some time
-      setTimeout(() => {
-        purchaseUpdateSubscription.remove();
-        purchaseErrorSubscription.remove();
-      }, 30000);
-
+      // Simulate a purchase by calling your server entitlement endpoint with a mock JWT
+      const mockJWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm9kdWN0SWQiOiJjb20udGllYnJlYWsuYXBwbGVpYXBhcHAuYmVnaW5uZXIiLCJ1c2VySWQiOiJNT0NLLVVTRVIiLCJ0eXBlIjoiU1VCU0NSSVBUSU9OIiwic3ViIjoiU1VCU0NSSVBUSU9OIiwiaWF0IjoxNjAwMDAwMDAwLCJleHAiOjE5MDAwMDAwMDB9.4Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Q';
+      // Replace with your actual server endpoint URL
+      const serverUrl = 'http://localhost:9000/entitlement/mock';
+      const response = await fetch(serverUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jwt: mockJWT, productId }),
+      });
+      if (response.ok) {
+        setPurchasedPackages(prev => new Set([...prev, productId]));
+        Alert.alert('Purchase Successful!', 'Your premium package has been activated.', [{ text: 'OK' }]);
+      } else {
+        const errorText = await response.text();
+        Alert.alert('Server Error', errorText || 'Failed to activate entitlement.');
+      }
+      setPurchasing(null);
     } catch (error) {
-      console.error('Error initiating purchase:', error);
-      Alert.alert('Error', 'Failed to initiate purchase');
+      console.error('Error in mock purchase:', error);
+      Alert.alert('Error', 'Failed to simulate purchase.');
       setPurchasing(null);
     }
   };
