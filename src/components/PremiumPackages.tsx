@@ -135,12 +135,33 @@ export const PremiumPackages: React.FC = () => {
         console.log('About to call getProducts with SKUs:', PREMIUM_PRODUCT_IDS);
         console.log('Current device region:', Intl.DateTimeFormat().resolvedOptions().timeZone);
         console.log('Current device locale:', Intl.DateTimeFormat().resolvedOptions().locale);
-        
-        const productList = await getProducts({ skus: PREMIUM_PRODUCT_IDS });
+
+        // Add a timeout to the getProducts call (10 seconds)
+        const fetchWithTimeout = (promise: Promise<any>, ms: number) => {
+          return Promise.race([
+            promise,
+            new Promise((_, reject) => setTimeout(() => reject(new Error('Timed out fetching products from App Store')), ms))
+          ]);
+        };
+
+        let productList: Product[] = [];
+        try {
+          productList = await fetchWithTimeout(getProducts({ skus: PREMIUM_PRODUCT_IDS }), 10000);
+        } catch (fetchError) {
+          console.error('=== PRODUCT FETCH ERROR OR TIMEOUT ===');
+          console.error('Error:', fetchError);
+          Alert.alert(
+            'Product Fetch Error',
+            'Could not fetch products from the App Store. Please check your network connection, App Store Connect configuration, and try again.'
+          );
+          setLoading(false);
+          return;
+        }
+
         console.log('=== PRODUCT FETCH RESULT ===');
         console.log('Raw products fetched from App Store:', JSON.stringify(productList, null, 2));
         console.log('Number of products returned:', productList.length);
-        
+
         if (productList.length > 0) {
           // SUCCESS! Products loaded
           const enhancedProducts: PremiumPackage[] = productList.map(product => {
@@ -157,14 +178,22 @@ export const PremiumPackages: React.FC = () => {
           setLoading(false);
           console.log('=== IAP INITIALIZATION SUCCESS ===');
           return;
+        } else {
+          // No products returned, show error and allow retry
+          console.error('No products returned from App Store.');
+          Alert.alert(
+            'No Products Available',
+            'No in-app purchase products were returned from the App Store. Please check your App Store Connect configuration and try again.'
+          );
+          setLoading(false);
+          return;
         }
       } catch (parseError) {
         console.error('=== STOREKIT PARSING ERROR ===');
         console.error('Detailed error:', parseError);
         console.error('This is the price configuration issue we detected');
-        
         Alert.alert(
-          'Price Configuration Error', 
+          'Price Configuration Error',
           'StoreKit found your products but could not parse the price information.\n\nPlease fix the pricing in App Store Connect:\n\n1. Use standard price tiers instead of custom prices\n2. Check territory settings\n3. Ensure all price fields are filled'
         );
         setLoading(false);
