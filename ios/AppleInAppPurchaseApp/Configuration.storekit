@@ -7,7 +7,7 @@
     {
       "displayPrice" : "200.00",
       "familyShareable" : false,
-      "identifier" : "com.yourapp.beginner",
+      "identifier" : "com.tiebreak.appleiapapp.beginner",
       "localizations" : [
         {
           "description" : "Perfect for getting started with basic analytics and email support",
@@ -15,14 +15,14 @@
           "locale" : "en_US"
         }
       ],
-      "productID" : "com.yourapp.beginner",
+      "productID" : "com.tiebreak.appleiapapp.beginner",
       "referenceName" : "Beginner Package",
       "type" : "NonConsumable"
     },
     {
       "displayPrice" : "450.00",
       "familyShareable" : false,
-      "identifier" : "com.yourapp.intermediate",
+      "identifier" : "com.tiebreak.appleiapapp.intermediate",
       "localizations" : [
         {
           "description" : "Enhanced features for growing users with advanced analytics and priority support",
@@ -30,14 +30,14 @@
           "locale" : "en_US"
         }
       ],
-      "productID" : "com.yourapp.intermediate",
+      "productID" : "com.tiebreak.appleiapapp.intermediate",
       "referenceName" : "Intermediate Package",
       "type" : "NonConsumable"
     },
     {
       "displayPrice" : "750.00",
       "familyShareable" : false,
-      "identifier" : "com.yourapp.trader",
+      "identifier" : "com.tiebreak.appleiapapp.trader",
       "localizations" : [
         {
           "description" : "Professional tools for active traders with real-time data and advanced charts",
@@ -45,14 +45,14 @@
           "locale" : "en_US"
         }
       ],
-      "productID" : "com.yourapp.trader",
+      "productID" : "com.tiebreak.appleiapapp.trader",
       "referenceName" : "Trader Package",
       "type" : "NonConsumable"
     },
     {
       "displayPrice" : "1000.00",
       "familyShareable" : false,
-      "identifier" : "com.yourapp.elite",
+      "identifier" : "com.tiebreak.appleiapapp.elite",
       "localizations" : [
         {
           "description" : "Premium experience for serious investors with exclusive insights and personal advisor",
@@ -60,14 +60,14 @@
           "locale" : "en_US"
         }
       ],
-      "productID" : "com.yourapp.elite",
+      "productID" : "com.tiebreak.appleiapapp.elite",
       "referenceName" : "Elite Package",
       "type" : "NonConsumable"
     },
     {
       "displayPrice" : "1500.00",
       "familyShareable" : false,
-      "identifier" : "com.yourapp.expert",
+      "identifier" : "com.tiebreak.appleiapapp.expert",
       "localizations" : [
         {
           "description" : "Ultimate package for professionals with all Elite features plus white-label options",
@@ -75,7 +75,7 @@
           "locale" : "en_US"
         }
       ],
-      "productID" : "com.yourapp.expert",
+      "productID" : "com.tiebreak.appleiapapp.expert",
       "referenceName" : "Expert Package",
       "type" : "NonConsumable"
     }

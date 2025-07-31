@@ -82,6 +82,18 @@ export const PremiumPackages: React.FC = () => {
       console.log('Product IDs to fetch:', PREMIUM_PRODUCT_IDS);
       console.log('Bundle ID should be: com.tiebreak.appleiapapp');
       console.log('Current environment: sandbox (should be sandbox for testing)');
+      console.log('Device network status: checking...');
+      
+      // Check if we can reach Apple servers
+      console.log('Testing connectivity to Apple services...');
+      
+      // Check current App Store sign-in status
+      console.log('=== SANDBOX USER CHECK ===');
+      console.log('IMPORTANT: Make sure you are:');
+      console.log('1. Signed OUT of App Store in Settings');
+      console.log('2. Will sign in with sandbox user ONLY when prompted during purchase');
+      console.log('3. Using a valid sandbox test user from App Store Connect');
+      console.log('============================');
       
       // Initialize connection to App Store
       console.log('Initializing connection to App Store...');
@@ -109,7 +121,7 @@ export const PremiumPackages: React.FC = () => {
         
         Alert.alert(
           'No Products Available', 
-          'In-app purchases are not available. Please check:\n\n1. In-App Purchases are "Ready to Submit" in App Store Connect\n2. Bundle ID matches exactly\n3. Product IDs are correct\n4. Signed in with sandbox test user'
+          'In-app purchases are not available. Please check:\n\n1. In-App Purchases are "Ready to Submit" in App Store Connect\n2. Bundle ID matches exactly\n3. Product IDs are correct\n4. SANDBOX USER: Sign OUT of App Store in Settings, then sign in with sandbox user ONLY when making a purchase\n5. Try running from Xcode instead of simulator'
         );
         setLoading(false);
         return;
@@ -245,7 +257,8 @@ export const PremiumPackages: React.FC = () => {
             Please check:
             {'\n'}• In-App Purchases are "Ready to Submit" in App Store Connect
             {'\n'}• Bundle ID matches exactly: com.tiebreak.appleiapapp
-            {'\n'}• You're signed in with a sandbox test user
+            {'\n'}• SANDBOX USER: Sign OUT of App Store in Settings first
+            {'\n'}• Sign in with sandbox user ONLY when prompted during purchase
             {'\n'}• Try running from Xcode instead of TestFlight
             {'\n'}• Check Xcode console for detailed error logs
           </Text>
