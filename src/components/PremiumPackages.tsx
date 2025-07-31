@@ -28,10 +28,11 @@ interface PremiumPackage extends Product {
 
 const PREMIUM_PRODUCT_IDS = [
   'com.tiebreak.appleiapapp.beginner',
-  'com.tiebreak.appleiapapp.intermediate',
-  'com.tiebreak.appleiapapp.trader',
-  'com.tiebreak.appleiapapp.elite',
-  'com.tiebreak.appleiapapp.expert',
+  // Testing with just one product first to isolate sandbox issues
+  // 'com.tiebreak.appleiapapp.intermediate',
+  // 'com.tiebreak.appleiapapp.trader',
+  // 'com.tiebreak.appleiapapp.elite',
+  // 'com.tiebreak.appleiapapp.expert',
 ];
 
 const PACKAGE_INFO = {
@@ -84,6 +85,11 @@ export const PremiumPackages: React.FC = () => {
       console.log('Current environment: sandbox (should be sandbox for testing)');
       console.log('Device network status: checking...');
       
+      // Check platform and environment
+      console.log('Platform.OS:', require('react-native').Platform.OS);
+      console.log('__DEV__:', __DEV__);
+      console.log('Testing with reduced product set to isolate issue');
+      
       // Check if we can reach Apple servers
       console.log('Testing connectivity to Apple services...');
       
@@ -101,46 +107,69 @@ export const PremiumPackages: React.FC = () => {
       console.log('IAP connection result:', connectionResult);
       console.log('IAP connection initialized successfully');
 
+      // TESTING: Let's try to see what happens if we skip the App Store entirely
+      // and use mock data to test the UI first
+      console.log('=== TESTING MODE: Using mock products ===');
+      const mockProducts = [
+        {
+          productId: 'com.tiebreak.appleiapapp.beginner',
+          title: 'Beginner (Mock)',
+          price: '200.00',
+          localizedPrice: '€200.00',
+          currency: 'EUR',
+          description: 'Perfect for getting started',
+        }
+      ];
+      
+      console.log('Mock products created:', mockProducts);
+
       // Get product information from App Store
       console.log('Fetching products from App Store...');
       console.log('Requesting products with SKUs:', PREMIUM_PRODUCT_IDS);
       
-      const productList = await getProducts({ skus: PREMIUM_PRODUCT_IDS });
-      console.log('=== PRODUCT FETCH RESULT ===');
-      console.log('Raw products fetched from App Store:', JSON.stringify(productList, null, 2));
-      console.log('Number of products returned:', productList.length);
+      // Add a small delay to ensure connection is fully established
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      if (productList.length === 0) {
-        console.error('=== NO PRODUCTS ERROR ===');
-        console.error('No products returned from App Store');
-        console.error('This usually means:');
-        console.error('1. Product IDs dont match exactly');
-        console.error('2. Products are not "Ready to Submit" in App Store Connect');
-        console.error('3. Bundle ID mismatch');
-        console.error('4. Not signed in with sandbox user');
+      try {
+        console.log('=== ATTEMPTING PRODUCT FETCH ===');
+        console.log('About to call getProducts with SKUs:', PREMIUM_PRODUCT_IDS);
+        console.log('Current device region:', Intl.DateTimeFormat().resolvedOptions().timeZone);
+        console.log('Current device locale:', Intl.DateTimeFormat().resolvedOptions().locale);
+        
+        const productList = await getProducts({ skus: PREMIUM_PRODUCT_IDS });
+        console.log('=== PRODUCT FETCH RESULT ===');
+        console.log('Raw products fetched from App Store:', JSON.stringify(productList, null, 2));
+        console.log('Number of products returned:', productList.length);
+        
+        if (productList.length > 0) {
+          // SUCCESS! Products loaded
+          const enhancedProducts: PremiumPackage[] = productList.map(product => {
+            console.log('Processing product:', product.productId, 'Price:', product.localizedPrice, 'Currency:', product.currency);
+            return {
+              ...product,
+              ...PACKAGE_INFO[product.productId as keyof typeof PACKAGE_INFO],
+            };
+          });
+
+          console.log('=== ENHANCED PRODUCTS ===');
+          console.log('Enhanced products:', JSON.stringify(enhancedProducts, null, 2));
+          setProducts(enhancedProducts);
+          setLoading(false);
+          console.log('=== IAP INITIALIZATION SUCCESS ===');
+          return;
+        }
+      } catch (parseError) {
+        console.error('=== STOREKIT PARSING ERROR ===');
+        console.error('Detailed error:', parseError);
+        console.error('This is the price configuration issue we detected');
         
         Alert.alert(
-          'No Products Available', 
-          'In-app purchases are not available. Please check:\n\n1. In-App Purchases are "Ready to Submit" in App Store Connect\n2. Bundle ID matches exactly\n3. Product IDs are correct\n4. SANDBOX USER: Sign OUT of App Store in Settings, then sign in with sandbox user ONLY when making a purchase\n5. Try running from Xcode instead of simulator'
+          'Price Configuration Error', 
+          'StoreKit found your products but could not parse the price information.\n\nPlease fix the pricing in App Store Connect:\n\n1. Use standard price tiers instead of custom prices\n2. Check territory settings\n3. Ensure all price fields are filled'
         );
         setLoading(false);
         return;
       }
-
-      // Enhance products with additional info
-      const enhancedProducts: PremiumPackage[] = productList.map(product => {
-        console.log('Processing product:', product.productId, 'Price:', product.localizedPrice, 'Currency:', product.currency);
-        return {
-          ...product,
-          ...PACKAGE_INFO[product.productId as keyof typeof PACKAGE_INFO],
-        };
-      });
-
-      console.log('=== ENHANCED PRODUCTS ===');
-      console.log('Enhanced products:', JSON.stringify(enhancedProducts, null, 2));
-      setProducts(enhancedProducts);
-      setLoading(false);
-      console.log('=== IAP INITIALIZATION SUCCESS ===');
     } catch (error) {
       console.error('=== IAP INITIALIZATION ERROR ===');
       console.error('Error initializing IAP:', error);

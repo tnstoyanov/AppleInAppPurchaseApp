@@ -1,5 +1,15 @@
 {
-  "identifier" : "F7A5B8C9-1234-5678-9ABC-DEF012345678",
+  "appPolicies" : {
+    "eula" : "",
+    "policies" : [
+      {
+        "locale" : "en_US",
+        "policyText" : "",
+        "policyURL" : ""
+      }
+    ]
+  },
+  "identifier" : "5BE7E316",
   "nonRenewingSubscriptions" : [
 
   ],
@@ -7,88 +17,88 @@
     {
       "displayPrice" : "200.00",
       "familyShareable" : false,
-      "identifier" : "com.tiebreak.appleiapapp.beginner",
+      "internalID" : "FD82F5F8",
       "localizations" : [
         {
-          "description" : "Perfect for getting started with basic analytics and email support",
+          "description" : "Perfect to get you started",
           "displayName" : "Beginner Package",
           "locale" : "en_US"
         }
       ],
       "productID" : "com.tiebreak.appleiapapp.beginner",
+      "promotionalImageID" : "6AE16C61",
       "referenceName" : "Beginner Package",
       "type" : "NonConsumable"
     },
     {
-      "displayPrice" : "450.00",
+      "displayPrice" : "449.99",
       "familyShareable" : false,
-      "identifier" : "com.tiebreak.appleiapapp.intermediate",
+      "internalID" : "A0326CA3",
       "localizations" : [
         {
-          "description" : "Enhanced features for growing users with advanced analytics and priority support",
-          "displayName" : "Intermediate Package",
+          "description" : "Great for intermediate users",
+          "displayName" : "com.tiebreak.appleiapapp.intermediate\nIntermediate Package",
           "locale" : "en_US"
         }
       ],
       "productID" : "com.tiebreak.appleiapapp.intermediate",
+      "promotionalImageID" : "B30F3EC7",
       "referenceName" : "Intermediate Package",
       "type" : "NonConsumable"
     },
     {
-      "displayPrice" : "750.00",
+      "displayPrice" : "749.99",
       "familyShareable" : false,
-      "identifier" : "com.tiebreak.appleiapapp.trader",
+      "internalID" : "17B813E8",
       "localizations" : [
         {
-          "description" : "Professional tools for active traders with real-time data and advanced charts",
-          "displayName" : "Trader Package",
+          "description" : "Great for traders",
+          "displayName" : "Trader Package\nTrader Package\nTrader Package\nTrader Package\nTrader Package",
           "locale" : "en_US"
         }
       ],
       "productID" : "com.tiebreak.appleiapapp.trader",
+      "promotionalImageID" : "0F534ADB",
       "referenceName" : "Trader Package",
       "type" : "NonConsumable"
     },
     {
       "displayPrice" : "1000.00",
       "familyShareable" : false,
-      "identifier" : "com.tiebreak.appleiapapp.elite",
+      "internalID" : "4F408C7E",
       "localizations" : [
         {
-          "description" : "Premium experience for serious investors with exclusive insights and personal advisor",
+          "description" : "Great for advanced users",
           "displayName" : "Elite Package",
           "locale" : "en_US"
         }
       ],
       "productID" : "com.tiebreak.appleiapapp.elite",
+      "promotionalImageID" : "B55EE3D8",
       "referenceName" : "Elite Package",
       "type" : "NonConsumable"
     },
     {
-      "displayPrice" : "1500.00",
+      "displayPrice" : "1199.99",
       "familyShareable" : false,
-      "identifier" : "com.tiebreak.appleiapapp.expert",
+      "internalID" : "D0E80AC8",
       "localizations" : [
         {
-          "description" : "Ultimate package for professionals with all Elite features plus white-label options",
+          "description" : "Great for expert users",
           "displayName" : "Expert Package",
           "locale" : "en_US"
         }
       ],
       "productID" : "com.tiebreak.appleiapapp.expert",
+      "promotionalImageID" : "A526FEA5",
       "referenceName" : "Expert Package",
       "type" : "NonConsumable"
     }
   ],
   "settings" : {
-    "_applicationInternalID" : "6478264139",
-    "_billingGracePeriodCutoffInterval" : "",
-    "_developerTeamID" : "YOUR_TEAM_ID_HERE",
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : "2025-07-30T10:20:00Z",
     "_locale" : "en_US",
-    "_rateLimitingEnabled" : false,
-    "_storefront" : "USA",
+    "_storefront" : "ITA",
     "_storeKitErrors" : [
       {
         "current" : null,
@@ -141,7 +151,7 @@
 
   ],
   "version" : {
-    "major" : 3,
+    "major" : 4,
     "minor" : 0
   }
 }
