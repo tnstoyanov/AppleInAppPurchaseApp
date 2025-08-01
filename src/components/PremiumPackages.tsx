@@ -234,19 +234,37 @@ export const PremiumPackages: React.FC = () => {
       setPurchasing(productId);
       
       // Step 1: Simulate a purchase and create a mock App Store Server Notification V2 JWT
+      const transactionId = `MOCK-TXN-${Date.now()}`;
       const mockNotificationPayload = {
         notificationType: 'DID_PURCHASE',
-        transactionId: `MOCK-TXN-${Date.now()}`,
-        originalTransactionId: `MOCK-ORIG-TXN-${Date.now()}`,
+        transactionId: transactionId,
+        originalTransactionId: transactionId,
         productId: productId,
         purchaseDate: new Date().toISOString(),
+        userId: currentUserId, // ✅ Include internal user ID
         appAccountToken: userAppAccountToken, // ✅ Link purchase to user via appAccountToken
         bundleId: 'com.tiebreak.appleiapapp',
         environment: 'Sandbox'
       };
       
-      // Create a more realistic mock JWT with appAccountToken (in production, this comes from Apple)
-      const mockJWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub3RpZmljYXRpb25UeXBlIjoiRElEX1BVUkNIQVNFIiwidHJhbnNhY3Rpb25JZCI6Ik1PQ0stVFhOLTE3MjI0NjU2MDAwMDAiLCJvcmlnaW5hbFRyYW5zYWN0aW9uSWQiOiJNT0NLLU9SSUctVFhOLTE3MjI0NjU2MDAwMDAiLCJwcm9kdWN0SWQiOiJjb20udGllYnJlYWsuYXBwbGVpYXBhcHAuYmVnaW5uZXIiLCJwdXJjaGFzZURhdGUiOiIyMDI1LTA4LTAxVDE5OjAwOjAwWiIsImFwcEFjY291bnRUb2tlbiI6ImFwcHRva2VuLXVzZXItMTIzNDUtdXVpZC12NCIsImJ1bmRsZUlkIjoiY29tLnRpZWJyZWFrLmFwcGxlaWFwYXBwIiwiZW52aXJvbm1lbnQiOiJTYW5kYm94IiwiaWF0IjoxNzIyNDY1NjAwLCJleHAiOjE5MDAwMDAwMDB9.mockSignatureWithAppAccountTokenForTestingPurposesOnly';
+      // Create a more realistic mock JWT with both userId and appAccountToken (in production, this comes from Apple)
+      // Updated JWT includes userId field for proper user mapping
+      const mockJWTPayload = {
+        notificationType: 'DID_PURCHASE',
+        transactionId: transactionId,
+        originalTransactionId: transactionId,
+        productId: productId,
+        purchaseDate: new Date().toISOString(),
+        userId: currentUserId, // ✅ Include internal user ID for server mapping
+        appAccountToken: userAppAccountToken,
+        bundleId: 'com.tiebreak.appleiapapp',
+        environment: 'Sandbox',
+        iat: Math.floor(Date.now() / 1000),
+        exp: 1900000000
+      };
+      
+      // For demo purposes, create a simple base64 encoded JWT (in production, Apple signs this)
+      const mockJWT = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.${btoa(JSON.stringify(mockJWTPayload))}.mockSignatureWithUserIdAndAppAccountToken`;
       
       // Step 2: Send the notification to your server (simulating Apple's webhook)
       const notificationUrl = 'http://localhost:9000/appstore/notification';
