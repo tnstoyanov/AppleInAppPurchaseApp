@@ -228,27 +228,73 @@ export const PremiumPackages: React.FC = () => {
   const handlePurchase = async (productId: string) => {
     try {
       setPurchasing(productId);
-      // Simulate a purchase by calling your server entitlement endpoint with a mock JWT
-      const mockJWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm9kdWN0SWQiOiJjb20udGllYnJlYWsuYXBwbGVpYXBhcHAuYmVnaW5uZXIiLCJ1c2VySWQiOiJNT0NLLVVTRVIiLCJ0eXBlIjoiU1VCU0NSSVBUSU9OIiwic3ViIjoiU1VCU0NSSVBUSU9OIiwiaWF0IjoxNjAwMDAwMDAwLCJleHAiOjE5MDAwMDAwMDB9.4Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Qw6Q';
-      // Replace with your actual server endpoint URL
-      const serverUrl = 'http://localhost:9000/entitlement/mock';
-      const response = await fetch(serverUrl, {
+      
+      // Step 1: Simulate a purchase and create a mock App Store Server Notification V2 JWT
+      const mockNotificationPayload = {
+        notificationType: 'DID_PURCHASE',
+        transactionId: `MOCK-TXN-${Date.now()}`,
+        originalTransactionId: `MOCK-ORIG-TXN-${Date.now()}`,
+        productId: productId,
+        purchaseDate: new Date().toISOString(),
+        userId: 'MOCK-USER-123',
+        bundleId: 'com.tiebreak.appleiapapp',
+        environment: 'Sandbox'
+      };
+      
+      // Create a more realistic mock JWT (in production, this comes from Apple)
+      const mockJWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub3RpZmljYXRpb25UeXBlIjoiRElEX1BVUkNIQVNFIiwidHJhbnNhY3Rpb25JZCI6Ik1PQ0stVFhOLTE3MjI0NjU2MDAwMDAiLCJvcmlnaW5hbFRyYW5zYWN0aW9uSWQiOiJNT0NLLU9SSUctVFhOLTE3MjI0NjU2MDAwMDAiLCJwcm9kdWN0SWQiOiJjb20udGllYnJlYWsuYXBwbGVpYXBhcHAuYmVnaW5uZXIiLCJwdXJjaGFzZURhdGUiOiIyMDI1LTA4LTAxVDE5OjAwOjAwWiIsInVzZXJJZCI6Ik1PQ0stVVNFUi0xMjMiLCJidW5kbGVJZCI6ImNvbS50aWVicmVhay5hcHBsZWlhcGFwcCIsImVudmlyb25tZW50IjoiU2FuZGJveCIsImlhdCI6MTcyMjQ2NTYwMCwiZXhwIjoxOTAwMDAwMDAwfQ.mockSignatureForTestingPurposesOnly';
+      
+      // Step 2: Send the notification to your server (simulating Apple's webhook)
+      const notificationUrl = 'http://localhost:9000/appstore/notification';
+      console.log('Sending App Store Server Notification V2 to server...');
+      
+      await fetch(notificationUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ jwt: mockJWT, productId }),
+        body: JSON.stringify({ signedPayload: mockJWT }),
       });
-      if (response.ok) {
-        setPurchasedPackages(prev => new Set([...prev, productId]));
-        Alert.alert('Purchase Successful!', 'Your premium package has been activated.', [{ text: 'OK' }]);
-      } else {
-        const errorText = await response.text();
-        Alert.alert('Server Error', errorText || 'Failed to activate entitlement.');
-      }
+      
+      // Step 3: Wait a moment for server processing, then check entitlement
+      setTimeout(async () => {
+        await checkEntitlement(productId);
+      }, 1000);
+      
       setPurchasing(null);
     } catch (error) {
       console.error('Error in mock purchase:', error);
       Alert.alert('Error', 'Failed to simulate purchase.');
       setPurchasing(null);
+    }
+  };
+
+  const checkEntitlement = async (productId: string) => {
+    try {
+      const userId = 'MOCK-USER-123'; // In real app, get from user session
+      const entitlementUrl = `http://localhost:9000/api/user/${userId}/entitlement/${productId}`;
+      
+      console.log('Checking entitlement from server...');
+      const response = await fetch(entitlementUrl);
+      
+      if (response.ok) {
+        const entitlementData = await response.json();
+        console.log('Entitlement response:', entitlementData);
+        
+        if (entitlementData.hasAccess) {
+          setPurchasedPackages(prev => new Set([...prev, productId]));
+          Alert.alert(
+            'Purchase Successful!', 
+            `Premium package activated!\n\nEntitlement: ${entitlementData.entitlementLevel}\nExpires: ${entitlementData.expiresAt || 'Never'}`,
+            [{ text: 'OK' }]
+          );
+        } else {
+          Alert.alert('Purchase Failed', 'Unable to verify entitlement with server.');
+        }
+      } else {
+        Alert.alert('Server Error', 'Failed to check entitlement status.');
+      }
+    } catch (error) {
+      console.error('Error checking entitlement:', error);
+      Alert.alert('Error', 'Failed to verify purchase with server.');
     }
   };
 
