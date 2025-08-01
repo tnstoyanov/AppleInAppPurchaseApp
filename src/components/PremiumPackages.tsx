@@ -68,6 +68,10 @@ export const PremiumPackages: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [purchasing, setPurchasing] = useState<string | null>(null);
   const [purchasedPackages, setPurchasedPackages] = useState<Set<string>>(new Set());
+  
+  // In a real app, this would come from your user authentication system
+  const currentUserId = 'user-12345'; // Your internal user ID
+  const userAppAccountToken = 'apptoken-user-12345-uuid-v4'; // UUID for this user
 
   useEffect(() => {
     // For mock/test mode, always show the mock product
@@ -236,17 +240,18 @@ export const PremiumPackages: React.FC = () => {
         originalTransactionId: `MOCK-ORIG-TXN-${Date.now()}`,
         productId: productId,
         purchaseDate: new Date().toISOString(),
-        userId: 'MOCK-USER-123',
+        appAccountToken: userAppAccountToken, // ✅ Link purchase to user via appAccountToken
         bundleId: 'com.tiebreak.appleiapapp',
         environment: 'Sandbox'
       };
       
-      // Create a more realistic mock JWT (in production, this comes from Apple)
-      const mockJWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub3RpZmljYXRpb25UeXBlIjoiRElEX1BVUkNIQVNFIiwidHJhbnNhY3Rpb25JZCI6Ik1PQ0stVFhOLTE3MjI0NjU2MDAwMDAiLCJvcmlnaW5hbFRyYW5zYWN0aW9uSWQiOiJNT0NLLU9SSUctVFhOLTE3MjI0NjU2MDAwMDAiLCJwcm9kdWN0SWQiOiJjb20udGllYnJlYWsuYXBwbGVpYXBhcHAuYmVnaW5uZXIiLCJwdXJjaGFzZURhdGUiOiIyMDI1LTA4LTAxVDE5OjAwOjAwWiIsInVzZXJJZCI6Ik1PQ0stVVNFUi0xMjMiLCJidW5kbGVJZCI6ImNvbS50aWVicmVhay5hcHBsZWlhcGFwcCIsImVudmlyb25tZW50IjoiU2FuZGJveCIsImlhdCI6MTcyMjQ2NTYwMCwiZXhwIjoxOTAwMDAwMDAwfQ.mockSignatureForTestingPurposesOnly';
+      // Create a more realistic mock JWT with appAccountToken (in production, this comes from Apple)
+      const mockJWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub3RpZmljYXRpb25UeXBlIjoiRElEX1BVUkNIQVNFIiwidHJhbnNhY3Rpb25JZCI6Ik1PQ0stVFhOLTE3MjI0NjU2MDAwMDAiLCJvcmlnaW5hbFRyYW5zYWN0aW9uSWQiOiJNT0NLLU9SSUctVFhOLTE3MjI0NjU2MDAwMDAiLCJwcm9kdWN0SWQiOiJjb20udGllYnJlYWsuYXBwbGVpYXBhcHAuYmVnaW5uZXIiLCJwdXJjaGFzZURhdGUiOiIyMDI1LTA4LTAxVDE5OjAwOjAwWiIsImFwcEFjY291bnRUb2tlbiI6ImFwcHRva2VuLXVzZXItMTIzNDUtdXVpZC12NCIsImJ1bmRsZUlkIjoiY29tLnRpZWJyZWFrLmFwcGxlaWFwYXBwIiwiZW52aXJvbm1lbnQiOiJTYW5kYm94IiwiaWF0IjoxNzIyNDY1NjAwLCJleHAiOjE5MDAwMDAwMDB9.mockSignatureWithAppAccountTokenForTestingPurposesOnly';
       
       // Step 2: Send the notification to your server (simulating Apple's webhook)
       const notificationUrl = 'http://localhost:9000/appstore/notification';
       console.log('Sending App Store Server Notification V2 to server...');
+      console.log('AppAccountToken:', userAppAccountToken);
       
       await fetch(notificationUrl, {
         method: 'POST',
@@ -269,10 +274,11 @@ export const PremiumPackages: React.FC = () => {
 
   const checkEntitlement = async (productId: string) => {
     try {
-      const userId = 'MOCK-USER-123'; // In real app, get from user session
-      const entitlementUrl = `http://localhost:9000/api/user/${userId}/entitlement/${productId}`;
+      // Use the appAccountToken to check entitlement (this links to your internal user system)
+      const entitlementUrl = `http://localhost:9000/api/user/token/${userAppAccountToken}/entitlement/${productId}`;
       
-      console.log('Checking entitlement from server...');
+      console.log('Checking entitlement from server using appAccountToken...');
+      console.log('AppAccountToken:', userAppAccountToken);
       const response = await fetch(entitlementUrl);
       
       if (response.ok) {
@@ -283,7 +289,7 @@ export const PremiumPackages: React.FC = () => {
           setPurchasedPackages(prev => new Set([...prev, productId]));
           Alert.alert(
             'Purchase Successful!', 
-            `Premium package activated!\n\nEntitlement: ${entitlementData.entitlementLevel}\nExpires: ${entitlementData.expiresAt || 'Never'}`,
+            `Premium package activated!\n\nUser ID: ${entitlementData.userId}\nEntitlement: ${entitlementData.entitlementLevel}\nExpires: ${entitlementData.expiresAt || 'Never'}`,
             [{ text: 'OK' }]
           );
         } else {
