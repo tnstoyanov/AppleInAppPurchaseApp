@@ -79,8 +79,8 @@ export const PremiumPackages: React.FC = () => {
       {
         productId: 'com.tiebreak.appleiapapp.beginner',
         title: 'Beginner (Mock)',
-        price: '200.00',
-        localizedPrice: '€200.00',
+        price: '2.00',
+        localizedPrice: '€2.00',
         currency: 'EUR',
         description: 'Perfect for getting started',
         features: ['Basic analytics', 'Email support', 'Mobile access'],
