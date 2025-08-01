@@ -28,37 +28,36 @@ interface PremiumPackage extends Product {
 
 const PREMIUM_PRODUCT_IDS = [
   'com.tiebreak.appleiapapp.beginner',
-  // Testing with just one product first to isolate sandbox issues
-  // 'com.tiebreak.appleiapapp.intermediate',
-  // 'com.tiebreak.appleiapapp.trader',
-  // 'com.tiebreak.appleiapapp.elite',
-  // 'com.tiebreak.appleiapapp.expert',
+  'com.tiebreak.appleiapapp.intermediate',
+  'com.tiebreak.appleiapapp.trader',
+  'com.tiebreak.appleiapapp.elite',
+  'com.tiebreak.appleiapapp.expert',
 ];
 
 const PACKAGE_INFO = {
   'com.tiebreak.appleiapapp.beginner': {
-    title: 'Beginner',
-    description: 'Perfect for getting started',
+    title: 'Beginner Package',
+    description: 'Perfect to get you started',
     features: ['Basic analytics', 'Email support', 'Mobile access'],
   },
   'com.tiebreak.appleiapapp.intermediate': {
-    title: 'Intermediate',
-    description: 'Enhanced features for growing users',
+    title: 'Intermediate Package',
+    description: 'Great for intermediate users',
     features: ['Advanced analytics', 'Priority support', 'API access', 'Custom reports'],
   },
   'com.tiebreak.appleiapapp.trader': {
-    title: 'Trader',
-    description: 'Professional tools for active traders',
+    title: 'Trader Package',
+    description: 'Great for traders',
     features: ['Real-time data', 'Advanced charts', 'Trading signals', 'Portfolio management'],
   },
   'com.tiebreak.appleiapapp.elite': {
-    title: 'Elite',
-    description: 'Premium experience for serious investors',
+    title: 'Elite Package',
+    description: 'Great for advanced users',
     features: ['Exclusive insights', 'Personal advisor', 'Premium alerts', 'Advanced tools'],
   },
   'com.tiebreak.appleiapapp.expert': {
-    title: 'Expert',
-    description: 'Ultimate package for professionals',
+    title: 'Expert Package',
+    description: 'Great for expert users',
     features: ['All Elite features', 'White-label options', 'API integration', 'Custom development'],
   },
 };
@@ -74,19 +73,61 @@ export const PremiumPackages: React.FC = () => {
   const userAppAccountToken = 'apptoken-user-12345-uuid-v4'; // UUID for this user
 
   useEffect(() => {
-    // For mock/test mode, always show the mock product
-    setProducts([
+    // For mock/test mode, show all products from StoreKit configuration
+    const mockProducts: PremiumPackage[] = [
       {
         productId: 'com.tiebreak.appleiapapp.beginner',
-        title: 'Beginner (Mock)',
-        price: '2.00',
-        localizedPrice: '€2.00',
+        title: 'Beginner Package',
+        price: '200.00',
+        localizedPrice: '€200.00',
         currency: 'EUR',
-        description: 'Perfect for getting started',
+        description: 'Perfect to get you started',
         features: ['Basic analytics', 'Email support', 'Mobile access'],
-        type: 'inapp', // Added to satisfy Product interface
+        type: 'inapp',
       },
-    ]);
+      {
+        productId: 'com.tiebreak.appleiapapp.intermediate',
+        title: 'Intermediate Package',
+        price: '449.99',
+        localizedPrice: '€449.99',
+        currency: 'EUR',
+        description: 'Great for intermediate users',
+        features: ['Advanced analytics', 'Priority support', 'API access', 'Custom reports'],
+        type: 'inapp',
+      },
+      {
+        productId: 'com.tiebreak.appleiapapp.trader',
+        title: 'Trader Package',
+        price: '749.99',
+        localizedPrice: '€749.99',
+        currency: 'EUR',
+        description: 'Great for traders',
+        features: ['Real-time data', 'Advanced charts', 'Trading signals', 'Portfolio management'],
+        type: 'inapp',
+      },
+      {
+        productId: 'com.tiebreak.appleiapapp.elite',
+        title: 'Elite Package',
+        price: '1000.00',
+        localizedPrice: '€1000.00',
+        currency: 'EUR',
+        description: 'Great for advanced users',
+        features: ['Exclusive insights', 'Personal advisor', 'Premium alerts', 'Advanced tools'],
+        type: 'inapp',
+      },
+      {
+        productId: 'com.tiebreak.appleiapapp.expert',
+        title: 'Expert Package',
+        price: '1199.99',
+        localizedPrice: '€1199.99',
+        currency: 'EUR',
+        description: 'Great for expert users',
+        features: ['All Elite features', 'White-label options', 'API integration', 'Custom development'],
+        type: 'inapp',
+      },
+    ];
+    
+    setProducts(mockProducts);
     setLoading(false);
     // Comment out real IAP init for mock mode
     // initializeIAP();
