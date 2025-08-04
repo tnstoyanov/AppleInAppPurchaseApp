@@ -299,7 +299,7 @@ export const PremiumPackages: React.FC = () => {
       const mockJWT = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.${base64urlPayload}.mockSignatureWithUserIdAndAppAccountToken`;
       
       // Step 2: Send the notification to your server (simulating Apple's webhook)
-      const notificationUrl = 'http://10.131.78.91:9000/appstore/notification';
+      const notificationUrl = 'http://10.131.78.91:9001/appstore/notification';
       console.log('Sending App Store Server Notification V2 to server...');
       console.log('AppAccountToken:', userAppAccountToken);
       
@@ -325,7 +325,7 @@ export const PremiumPackages: React.FC = () => {
   const checkEntitlement = async (productId: string) => {
     try {
       // Use the appAccountToken to check entitlement (this links to your internal user system)
-      const entitlementUrl = `http://10.131.78.91:9000/api/user/token/${userAppAccountToken}/entitlement/${productId}`;
+      const entitlementUrl = `http://10.131.78.91:9001/api/user/token/${userAppAccountToken}/entitlement/${productId}`;
       
       console.log('Checking entitlement from server using appAccountToken...');
       console.log('AppAccountToken:', userAppAccountToken);
