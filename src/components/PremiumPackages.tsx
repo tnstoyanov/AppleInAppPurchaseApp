@@ -71,66 +71,73 @@ export const PremiumPackages: React.FC = () => {
   // In a real app, this would come from your user authentication system
   const currentUserId = 'user-12345'; // Your internal user ID
   const userAppAccountToken = 'apptoken-user-12345-uuid-v4'; // UUID for this user
+  
+  // Toggle between mock and real App Store testing
+  const USE_REAL_APP_STORE = true; // ✅ ENABLED for physical device testing
 
   useEffect(() => {
-    // For mock/test mode, show all products from StoreKit configuration
-    const mockProducts: PremiumPackage[] = [
-      {
-        productId: 'com.tiebreak.appleiapapp.beginner',
-        title: 'Beginner Package',
-        price: '200.00',
-        localizedPrice: '€200.00',
-        currency: 'EUR',
-        description: 'Perfect to get you started',
-        features: ['Basic analytics', 'Email support', 'Mobile access'],
-        type: 'inapp',
-      },
-      {
-        productId: 'com.tiebreak.appleiapapp.intermediate',
-        title: 'Intermediate Package',
-        price: '449.99',
-        localizedPrice: '€449.99',
-        currency: 'EUR',
-        description: 'Great for intermediate users',
-        features: ['Advanced analytics', 'Priority support', 'API access', 'Custom reports'],
-        type: 'inapp',
-      },
-      {
-        productId: 'com.tiebreak.appleiapapp.trader',
-        title: 'Trader Package',
-        price: '749.99',
-        localizedPrice: '€749.99',
-        currency: 'EUR',
-        description: 'Great for traders',
-        features: ['Real-time data', 'Advanced charts', 'Trading signals', 'Portfolio management'],
-        type: 'inapp',
-      },
-      {
-        productId: 'com.tiebreak.appleiapapp.elite',
-        title: 'Elite Package',
-        price: '1000.00',
-        localizedPrice: '€1000.00',
-        currency: 'EUR',
-        description: 'Great for advanced users',
-        features: ['Exclusive insights', 'Personal advisor', 'Premium alerts', 'Advanced tools'],
-        type: 'inapp',
-      },
-      {
-        productId: 'com.tiebreak.appleiapapp.expert',
-        title: 'Expert Package',
-        price: '1199.99',
-        localizedPrice: '€1199.99',
-        currency: 'EUR',
-        description: 'Great for expert users',
-        features: ['All Elite features', 'White-label options', 'API integration', 'Custom development'],
-        type: 'inapp',
-      },
-    ];
+    if (USE_REAL_APP_STORE) {
+      // Initialize real App Store IAP
+      initializeIAP();
+    } else {
+      // For mock/test mode, show all products from StoreKit configuration
+      const mockProducts: PremiumPackage[] = [
+        {
+          productId: 'com.tiebreak.appleiapapp.beginner',
+          title: 'Beginner Package',
+          price: '200.00',
+          localizedPrice: '€200.00',
+          currency: 'EUR',
+          description: 'Perfect to get you started',
+          features: ['Basic analytics', 'Email support', 'Mobile access'],
+          type: 'inapp',
+        },
+        {
+          productId: 'com.tiebreak.appleiapapp.intermediate',
+          title: 'Intermediate Package',
+          price: '449.99',
+          localizedPrice: '€449.99',
+          currency: 'EUR',
+          description: 'Great for intermediate users',
+          features: ['Advanced analytics', 'Priority support', 'API access', 'Custom reports'],
+          type: 'inapp',
+        },
+        {
+          productId: 'com.tiebreak.appleiapapp.trader',
+          title: 'Trader Package',
+          price: '749.99',
+          localizedPrice: '€749.99',
+          currency: 'EUR',
+          description: 'Great for traders',
+          features: ['Real-time data', 'Advanced charts', 'Trading signals', 'Portfolio management'],
+          type: 'inapp',
+        },
+        {
+          productId: 'com.tiebreak.appleiapapp.elite',
+          title: 'Elite Package',
+          price: '1000.00',
+          localizedPrice: '€1000.00',
+          currency: 'EUR',
+          description: 'Great for advanced users',
+          features: ['Exclusive insights', 'Personal advisor', 'Premium alerts', 'Advanced tools'],
+          type: 'inapp',
+        },
+        {
+          productId: 'com.tiebreak.appleiapapp.expert',
+          title: 'Expert Package',
+          price: '1199.99',
+          localizedPrice: '€1199.99',
+          currency: 'EUR',
+          description: 'Great for expert users',
+          features: ['All Elite features', 'White-label options', 'API integration', 'Custom development'],
+          type: 'inapp',
+        },
+      ];
+      
+      setProducts(mockProducts);
+      setLoading(false);
+    }
     
-    setProducts(mockProducts);
-    setLoading(false);
-    // Comment out real IAP init for mock mode
-    // initializeIAP();
     return () => {
       // Clean up listeners
     };
@@ -138,139 +145,118 @@ export const PremiumPackages: React.FC = () => {
 
   const initializeIAP = async () => {
     try {
-      console.log('=== IAP INITIALIZATION START ===');
+      console.log('=== REAL APP STORE IAP INITIALIZATION START ===');
       console.log('Product IDs to fetch:', PREMIUM_PRODUCT_IDS);
       console.log('Bundle ID should be: com.tiebreak.appleiapapp');
-      console.log('Current environment: sandbox (should be sandbox for testing)');
-      console.log('Device network status: checking...');
-      
-      // Check platform and environment
-      console.log('Platform.OS:', require('react-native').Platform.OS);
-      console.log('__DEV__:', __DEV__);
-      console.log('Testing with reduced product set to isolate issue');
-      
-      // Check if we can reach Apple servers
-      console.log('Testing connectivity to Apple services...');
-      
-      // Check current App Store sign-in status
-      console.log('=== SANDBOX USER CHECK ===');
-      console.log('IMPORTANT: Make sure you are:');
-      console.log('1. Signed OUT of App Store in Settings');
-      console.log('2. Will sign in with sandbox user ONLY when prompted during purchase');
-      console.log('3. Using a valid sandbox test user from App Store Connect');
-      console.log('============================');
       
       // Initialize connection to App Store
       console.log('Initializing connection to App Store...');
       const connectionResult = await initConnection();
       console.log('IAP connection result:', connectionResult);
-      console.log('IAP connection initialized successfully');
 
-      // TESTING: Let's try to see what happens if we skip the App Store entirely
-      // and use mock data to test the UI first
-      console.log('=== TESTING MODE: Using mock products ===');
-      const mockProducts = [
-        {
-          productId: 'com.tiebreak.appleiapapp.beginner',
-          title: 'Beginner (Mock)',
-          price: '200.00',
-          localizedPrice: '€200.00',
-          currency: 'EUR',
-          description: 'Perfect for getting started',
-        }
-      ];
-      
-      console.log('Mock products created:', mockProducts);
+      // Set up purchase listeners for real purchases
+      const purchaseUpdateSubscription = purchaseUpdatedListener(async (purchase: Purchase) => {
+        console.log('Purchase updated:', purchase);
+        await handleRealPurchase(purchase);
+      });
+
+      const purchaseErrorSubscription = purchaseErrorListener((error) => {
+        console.error('Purchase error:', error);
+        Alert.alert('Purchase Error', error.message);
+        setPurchasing(null);
+      });
 
       // Get product information from App Store
       console.log('Fetching products from App Store...');
-      console.log('Requesting products with SKUs:', PREMIUM_PRODUCT_IDS);
+      const productList: Product[] = await getProducts({ skus: PREMIUM_PRODUCT_IDS });
       
-      // Add a small delay to ensure connection is fully established
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      try {
-        console.log('=== ATTEMPTING PRODUCT FETCH ===');
-        console.log('About to call getProducts with SKUs:', PREMIUM_PRODUCT_IDS);
-        console.log('Current device region:', Intl.DateTimeFormat().resolvedOptions().timeZone);
-        console.log('Current device locale:', Intl.DateTimeFormat().resolvedOptions().locale);
+      console.log('Products fetched from App Store:', productList);
 
-        // Add a timeout to the getProducts call (10 seconds)
-        const fetchWithTimeout = (promise: Promise<any>, ms: number) => {
-          return Promise.race([
-            promise,
-            new Promise((_, reject) => setTimeout(() => reject(new Error('Timed out fetching products from App Store')), ms))
-          ]);
-        };
+      if (productList.length > 0) {
+        const enhancedProducts: PremiumPackage[] = productList.map(product => {
+          const packageInfo = PACKAGE_INFO[product.productId as keyof typeof PACKAGE_INFO];
+          return {
+            ...product,
+            ...packageInfo,
+          };
+        });
 
-        let productList: Product[] = [];
-        try {
-          productList = await fetchWithTimeout(getProducts({ skus: PREMIUM_PRODUCT_IDS }), 10000);
-        } catch (fetchError) {
-          console.error('=== PRODUCT FETCH ERROR OR TIMEOUT ===');
-          console.error('Error:', fetchError);
-          Alert.alert(
-            'Product Fetch Error',
-            'Could not fetch products from the App Store. Please check your network connection, App Store Connect configuration, and try again.'
-          );
-          setLoading(false);
-          return;
-        }
-
-        console.log('=== PRODUCT FETCH RESULT ===');
-        console.log('Raw products fetched from App Store:', JSON.stringify(productList, null, 2));
-        console.log('Number of products returned:', productList.length);
-
-        if (productList.length > 0) {
-          // SUCCESS! Products loaded
-          const enhancedProducts: PremiumPackage[] = productList.map(product => {
-            console.log('Processing product:', product.productId, 'Price:', product.localizedPrice, 'Currency:', product.currency);
-            return {
-              ...product,
-              ...PACKAGE_INFO[product.productId as keyof typeof PACKAGE_INFO],
-            };
-          });
-
-          console.log('=== ENHANCED PRODUCTS ===');
-          console.log('Enhanced products:', JSON.stringify(enhancedProducts, null, 2));
-          setProducts(enhancedProducts);
-          setLoading(false);
-          console.log('=== IAP INITIALIZATION SUCCESS ===');
-          return;
-        } else {
-          // No products returned, show error and allow retry
-          console.error('No products returned from App Store.');
-          Alert.alert(
-            'No Products Available',
-            'No in-app purchase products were returned from the App Store. Please check your App Store Connect configuration and try again.'
-          );
-          setLoading(false);
-          return;
-        }
-      } catch (parseError) {
-        console.error('=== STOREKIT PARSING ERROR ===');
-        console.error('Detailed error:', parseError);
-        console.error('This is the price configuration issue we detected');
+        console.log('Enhanced products:', enhancedProducts);
+        setProducts(enhancedProducts);
+        setLoading(false);
+        console.log('=== REAL IAP INITIALIZATION SUCCESS ===');
+      } else {
+        console.error('No products returned from App Store.');
         Alert.alert(
-          'Price Configuration Error',
-          'StoreKit found your products but could not parse the price information.\n\nPlease fix the pricing in App Store Connect:\n\n1. Use standard price tiers instead of custom prices\n2. Check territory settings\n3. Ensure all price fields are filled'
+          'No Products Available',
+          'No in-app purchase products were returned from the App Store. Please check your App Store Connect configuration.'
         );
         setLoading(false);
-        return;
       }
     } catch (error) {
       console.error('=== IAP INITIALIZATION ERROR ===');
       console.error('Error initializing IAP:', error);
-      console.error('Error details:', JSON.stringify(error, null, 2));
-      Alert.alert(
-        'IAP Error', 
-        `Failed to load premium packages: ${(error as Error)?.message || String(error)}`
-      );
+      Alert.alert('IAP Error', `Failed to load premium packages: ${(error as Error)?.message || String(error)}`);
       setLoading(false);
     }
   };
 
+  const handleRealPurchase = async (purchase: Purchase) => {
+    console.log('=== PROCESSING REAL APP STORE PURCHASE ===');
+    console.log('Purchase details:', purchase);
+    
+    try {
+      // Real purchases will be handled by App Store Server Notifications V2
+      // Apple will send the signed JWT to your server automatically
+      // Here we just need to verify the purchase locally and wait for server confirmation
+      
+      await finishTransaction({ purchase, isConsumable: false });
+      
+      // Check entitlement from server (Apple should have sent notification by now)
+      setTimeout(async () => {
+        await checkEntitlement(purchase.productId);
+      }, 2000); // Wait 2 seconds for server processing
+      
+      setPurchasing(null);
+      
+    } catch (error) {
+      console.error('Error processing real purchase:', error);
+      Alert.alert('Error', 'Failed to process purchase');
+      setPurchasing(null);
+    }
+  };
+
   const handlePurchase = async (productId: string) => {
+    if (USE_REAL_APP_STORE) {
+      return handleRealAppStorePurchase(productId);
+    } else {
+      return handleMockPurchase(productId);
+    }
+  };
+
+  const handleRealAppStorePurchase = async (productId: string) => {
+    try {
+      setPurchasing(productId);
+      console.log('=== INITIATING REAL APP STORE PURCHASE ===');
+      console.log('ProductId:', productId);
+      console.log('AppAccountToken:', userAppAccountToken);
+      
+      // Make real App Store purchase with appAccountToken
+      await requestPurchase({
+        sku: productId,
+        appAccountToken: userAppAccountToken, // This links the purchase to your user
+      });
+      
+      // Purchase handling will continue in handleRealPurchase via purchaseUpdatedListener
+      
+    } catch (error) {
+      console.error('Error initiating real purchase:', error);
+      Alert.alert('Purchase Error', 'Failed to initiate purchase');
+      setPurchasing(null);
+    }
+  };
+
+  const handleMockPurchase = async (productId: string) => {
     try {
       setPurchasing(productId);
       
