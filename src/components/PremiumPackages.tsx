@@ -291,7 +291,12 @@ export const PremiumPackages: React.FC = () => {
       };
       
       // For demo purposes, create a simple base64 encoded JWT (in production, Apple signs this)
-      const mockJWT = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.${btoa(JSON.stringify(mockJWTPayload))}.mockSignatureWithUserIdAndAppAccountToken`;
+      // Convert to base64url format (used in JWT)
+      const base64urlPayload = btoa(JSON.stringify(mockJWTPayload))
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=/g, '');
+      const mockJWT = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.${base64urlPayload}.mockSignatureWithUserIdAndAppAccountToken`;
       
       // Step 2: Send the notification to your server (simulating Apple's webhook)
       const notificationUrl = 'http://10.131.78.91:9000/appstore/notification';
