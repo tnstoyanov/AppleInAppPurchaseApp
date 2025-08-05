@@ -325,11 +325,22 @@ export const PremiumPackages: React.FC = () => {
   const checkEntitlement = async (productId: string) => {
     try {
       // Use the appAccountToken to check entitlement (this links to your internal user system)
-      const entitlementUrl = `http://10.131.78.91:9001/api/user/token/${userAppAccountToken}/entitlement/${productId}`;
+      const entitlementUrl = `https://apple-1mbzai8v1-tony-stoyanovs-projects.vercel.app/api/user/token/${userAppAccountToken}/entitlement/${productId}`;
       
       console.log('Checking entitlement from server using appAccountToken...');
       console.log('AppAccountToken:', userAppAccountToken);
-      const response = await fetch(entitlementUrl);
+      console.log('Entitlement URL:', entitlementUrl);
+      
+      const response = await fetch(entitlementUrl, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': 'AppleInAppPurchaseApp/1.0'
+        },
+      });
+      
+      console.log('Response status:', response.status);
+      console.log('Response headers:', response.headers);
       
       if (response.ok) {
         const entitlementData = await response.json();
@@ -346,7 +357,9 @@ export const PremiumPackages: React.FC = () => {
           Alert.alert('Purchase Failed', 'Unable to verify entitlement with server.');
         }
       } else {
-        Alert.alert('Server Error', 'Failed to check entitlement status.');
+        const errorText = await response.text();
+        console.error('Server response error:', errorText);
+        Alert.alert('Server Error', `Failed to check entitlement status. Status: ${response.status}`);
       }
     } catch (error) {
       console.error('Error checking entitlement:', error);
