@@ -1,14 +1,4 @@
 {
-  "appPolicies" : {
-    "eula" : "",
-    "policies" : [
-      {
-        "locale" : "en_US",
-        "policyText" : "",
-        "policyURL" : ""
-      }
-    ]
-  },
   "identifier" : "5BE7E316",
   "nonRenewingSubscriptions" : [
 
@@ -26,7 +16,6 @@
         }
       ],
       "productID" : "com.tiebreak.appleiapapp.beginner",
-      "promotionalImageID" : "6AE16C61",
       "referenceName" : "Beginner Package",
       "type" : "NonConsumable"
     },
@@ -42,7 +31,6 @@
         }
       ],
       "productID" : "com.tiebreak.appleiapapp.intermediate",
-      "promotionalImageID" : "B30F3EC7",
       "referenceName" : "Intermediate Package",
       "type" : "NonConsumable"
     },
@@ -58,7 +46,6 @@
         }
       ],
       "productID" : "com.tiebreak.appleiapapp.trader",
-      "promotionalImageID" : "0F534ADB",
       "referenceName" : "Trader Package",
       "type" : "NonConsumable"
     },
@@ -74,7 +61,6 @@
         }
       ],
       "productID" : "com.tiebreak.appleiapapp.elite",
-      "promotionalImageID" : "B55EE3D8",
       "referenceName" : "Elite Package",
       "type" : "NonConsumable"
     },
@@ -90,7 +76,6 @@
         }
       ],
       "productID" : "com.tiebreak.appleiapapp.expert",
-      "promotionalImageID" : "A526FEA5",
       "referenceName" : "Expert Package",
       "type" : "NonConsumable"
     }
@@ -98,7 +83,7 @@
   "settings" : {
     "_failTransactionsEnabled" : false,
     "_locale" : "en_US",
-    "_storefront" : "ITA",
+    "_storefront" : "USA",
     "_storeKitErrors" : [
       {
         "current" : null,
@@ -151,7 +136,7 @@
 
   ],
   "version" : {
-    "major" : 4,
+    "major" : 3,
     "minor" : 0
   }
 }
