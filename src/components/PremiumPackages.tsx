@@ -173,10 +173,24 @@ export const PremiumPackages: React.FC = () => {
 
       // Try to get products from StoreKit configuration or App Store
       console.log('Fetching products from StoreKit configuration or App Store...');
+      console.log('Product IDs being requested:', PREMIUM_PRODUCT_IDS);
       
       try {
         const productList: Product[] = await getProducts({ skus: PREMIUM_PRODUCT_IDS });
-        console.log('Raw products fetched:', productList);
+        console.log('Raw products fetched from getProducts():', productList);
+        console.log('Number of products returned:', productList.length);
+        
+        // Log details of each product
+        productList.forEach((product, index) => {
+          console.log(`Product ${index + 1}:`, {
+            productId: product.productId,
+            price: product.price,
+            localizedPrice: product.localizedPrice,
+            currency: product.currency,
+            title: product.title || 'No title',
+            description: product.description || 'No description'
+          });
+        });
 
         if (productList.length > 0) {
           const enhancedProducts: PremiumPackage[] = productList.map(product => {
@@ -192,16 +206,41 @@ export const PremiumPackages: React.FC = () => {
           console.log('Enhanced products from StoreKit/App Store:', enhancedProducts);
           setProducts(enhancedProducts);
           setLoading(false);
-          console.log('=== IAP INITIALIZATION SUCCESS (Products Loaded) ===');
+          console.log('=== IAP INITIALIZATION SUCCESS (Products Loaded from StoreKit/App Store) ===');
           return;
+        } else {
+          console.log('getProducts() returned empty array - this indicates StoreKit configuration issue');
         }
       } catch (productError) {
         console.log('Error fetching products from StoreKit/App Store:', productError);
+        console.log('Error details:', {
+          message: (productError as any)?.message,
+          code: (productError as any)?.code,
+          stack: (productError as any)?.stack
+        });
       }
 
       // Fallback: Use local configuration for StoreKit testing
-      console.log('No products from StoreKit/App Store. Using local fallback configuration...');
-      const fallbackProducts: PremiumPackage[] = PREMIUM_PRODUCT_IDS.map(productId => {
+      console.log('⚠️  StoreKit configuration not loading products properly!');
+      console.log('This means either:');
+      console.log('1. StoreKit Configuration is not selected in Xcode scheme');
+      console.log('2. Bundle ID mismatch in Configuration.storekit');
+      console.log('3. Product IDs in Configuration.storekit don\'t match our code');
+      console.log('4. App needs to be run from Xcode (not React Native CLI) for StoreKit testing');
+      
+      // Show warning but allow continuing with mock products for development
+      Alert.alert(
+        'StoreKit Configuration Issue',
+        'No products loaded from StoreKit configuration.\n\n' +
+        'For StoreKit testing:\n' +
+        '1. Make sure Configuration.storekit is selected in Xcode scheme\n' +
+        '2. Run the app from Xcode (⌘+R), not React Native CLI\n\n' +
+        'Continuing with mock products for now...',
+        [{ text: 'OK' }]
+      );
+      
+      // Use mock products that can't actually be purchased (for display only)
+      const mockProducts: PremiumPackage[] = PREMIUM_PRODUCT_IDS.map(productId => {
         const packageInfo = PACKAGE_INFO[productId as keyof typeof PACKAGE_INFO];
         return {
           productId,
@@ -211,14 +250,13 @@ export const PremiumPackages: React.FC = () => {
           title: packageInfo.title,
           description: packageInfo.description,
           features: packageInfo.features,
-          type: 'inapp',
+          type: 'inapp', // Use valid type but mark as mock in another way
         } as PremiumPackage;
       });
       
-      setProducts(fallbackProducts);
+      setProducts(mockProducts);
       setLoading(false);
-      console.log('Using fallback products for StoreKit testing:', fallbackProducts);
-      console.log('=== IAP INITIALIZATION SUCCESS (Fallback Products) ===');
+      console.log('Using mock products (purchases will fail - run from Xcode for StoreKit testing):', mockProducts);
       
     } catch (error) {
       console.error('=== IAP INITIALIZATION ERROR ===');
@@ -292,6 +330,20 @@ export const PremiumPackages: React.FC = () => {
         console.error('Product not found in loaded products:', productId);
         console.log('Available products:', products.map(p => p.productId));
         Alert.alert('Error', 'Product not available for purchase');
+        setPurchasing(null);
+        return;
+      }
+
+      // Check if this is a mock product (no real StoreKit products loaded)
+      if (!product.localizedPrice.includes('€') || !product.currency) {
+        console.log('⚠️  Mock product detected - StoreKit not working properly');
+        Alert.alert(
+          'StoreKit Testing Required',
+          'To test purchases, please run the app from Xcode with StoreKit Configuration enabled.\n\n' +
+          '1. Open Xcode workspace\n' +
+          '2. Verify Configuration.storekit is selected in scheme\n' +
+          '3. Build and run from Xcode (⌘+R)'
+        );
         setPurchasing(null);
         return;
       }
