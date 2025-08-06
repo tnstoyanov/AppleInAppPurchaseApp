@@ -37,7 +37,7 @@
       "localizations" : [
         {
           "description" : "Great for intermediate users",
-          "displayName" : "com.tiebreak.appleiapapp.intermediate\nIntermediate Package",
+          "displayName" : "Intermediate Package",
           "locale" : "en_US"
         }
       ],
@@ -53,7 +53,7 @@
       "localizations" : [
         {
           "description" : "Great for traders",
-          "displayName" : "Trader Package\nTrader Package\nTrader Package\nTrader Package\nTrader Package",
+          "displayName" : "Trader Package",
           "locale" : "en_US"
         }
       ],
