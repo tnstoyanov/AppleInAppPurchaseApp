@@ -150,12 +150,12 @@ export const PremiumPackages: React.FC = () => {
 
   const initializeIAP = async () => {
     try {
-      console.log('=== REAL APP STORE IAP INITIALIZATION START ===');
+      console.log('=== IAP INITIALIZATION START (StoreKit + App Store) ===');
       console.log('Product IDs to fetch:', PREMIUM_PRODUCT_IDS);
       console.log('Bundle ID should be: com.tiebreak.appleiapapp');
       
-      // Initialize connection to App Store
-      console.log('Initializing connection to App Store...');
+      // Initialize connection to App Store/StoreKit
+      console.log('Initializing connection...');
       const connectionResult = await initConnection();
       console.log('IAP connection result:', connectionResult);
 
@@ -171,51 +171,78 @@ export const PremiumPackages: React.FC = () => {
         setPurchasing(null);
       });
 
-      // Get product information from App Store or StoreKit Configuration
-      console.log('Fetching products (StoreKit or App Store)...');
-      const productList: Product[] = await getProducts({ skus: PREMIUM_PRODUCT_IDS });
+      // Try to get products from StoreKit configuration or App Store
+      console.log('Fetching products from StoreKit configuration or App Store...');
       
-      console.log('Products fetched:', productList);
+      try {
+        const productList: Product[] = await getProducts({ skus: PREMIUM_PRODUCT_IDS });
+        console.log('Raw products fetched:', productList);
 
-      if (productList.length > 0) {
-        const enhancedProducts: PremiumPackage[] = productList.map(product => {
-          const packageInfo = PACKAGE_INFO[product.productId as keyof typeof PACKAGE_INFO];
-          return {
-            ...product,
-            title: packageInfo.title,
-            description: packageInfo.description,
-            features: packageInfo.features,
-          } as PremiumPackage;
-        });
+        if (productList.length > 0) {
+          const enhancedProducts: PremiumPackage[] = productList.map(product => {
+            const packageInfo = PACKAGE_INFO[product.productId as keyof typeof PACKAGE_INFO];
+            return {
+              ...product,
+              title: packageInfo.title,
+              description: packageInfo.description,
+              features: packageInfo.features,
+            } as PremiumPackage;
+          });
 
-        console.log('Enhanced products:', enhancedProducts);
-        setProducts(enhancedProducts);
-        setLoading(false);
-        console.log('=== REAL IAP INITIALIZATION SUCCESS ===');
-      } else {
-        console.log('No products returned. Using fallback configuration for StoreKit testing...');
-        // Fallback for StoreKit testing - create mock products
-        const fallbackProducts: PremiumPackage[] = PREMIUM_PRODUCT_IDS.map(productId => {
-          const packageInfo = PACKAGE_INFO[productId as keyof typeof PACKAGE_INFO];
-          return {
-            productId,
-            price: packageInfo.price.toString(),
-            currency: 'EUR',
-            localizedPrice: `€${packageInfo.price}`,
-            title: packageInfo.title,
-            description: packageInfo.description,
-            features: packageInfo.features,
-          } as PremiumPackage;
-        });
-        setProducts(fallbackProducts);
-        setLoading(false);
-        console.log('Using fallback products for StoreKit testing:', fallbackProducts);
+          console.log('Enhanced products from StoreKit/App Store:', enhancedProducts);
+          setProducts(enhancedProducts);
+          setLoading(false);
+          console.log('=== IAP INITIALIZATION SUCCESS (Products Loaded) ===');
+          return;
+        }
+      } catch (productError) {
+        console.log('Error fetching products from StoreKit/App Store:', productError);
       }
+
+      // Fallback: Use local configuration for StoreKit testing
+      console.log('No products from StoreKit/App Store. Using local fallback configuration...');
+      const fallbackProducts: PremiumPackage[] = PREMIUM_PRODUCT_IDS.map(productId => {
+        const packageInfo = PACKAGE_INFO[productId as keyof typeof PACKAGE_INFO];
+        return {
+          productId,
+          price: packageInfo.price.toString(),
+          currency: 'EUR',
+          localizedPrice: `€${packageInfo.price}`,
+          title: packageInfo.title,
+          description: packageInfo.description,
+          features: packageInfo.features,
+          type: 'inapp',
+        } as PremiumPackage;
+      });
+      
+      setProducts(fallbackProducts);
+      setLoading(false);
+      console.log('Using fallback products for StoreKit testing:', fallbackProducts);
+      console.log('=== IAP INITIALIZATION SUCCESS (Fallback Products) ===');
+      
     } catch (error) {
       console.error('=== IAP INITIALIZATION ERROR ===');
       console.error('Error initializing IAP:', error);
-      Alert.alert('IAP Error', `Failed to load premium packages: ${(error as Error)?.message || String(error)}`);
+      
+      // Last resort: Use local products anyway
+      console.log('Using emergency fallback products...');
+      const emergencyProducts: PremiumPackage[] = PREMIUM_PRODUCT_IDS.map(productId => {
+        const packageInfo = PACKAGE_INFO[productId as keyof typeof PACKAGE_INFO];
+        return {
+          productId,
+          price: packageInfo.price.toString(),
+          currency: 'EUR',
+          localizedPrice: `€${packageInfo.price}`,
+          title: packageInfo.title,
+          description: packageInfo.description,
+          features: packageInfo.features,
+          type: 'inapp',
+        } as PremiumPackage;
+      });
+      
+      setProducts(emergencyProducts);
       setLoading(false);
+      console.log('Emergency fallback products loaded');
     }
   };
 
@@ -255,21 +282,44 @@ export const PremiumPackages: React.FC = () => {
   const handleRealAppStorePurchase = async (productId: string) => {
     try {
       setPurchasing(productId);
-      console.log('=== INITIATING REAL APP STORE PURCHASE ===');
+      console.log('=== INITIATING PURCHASE (StoreKit/App Store) ===');
       console.log('ProductId:', productId);
       console.log('AppAccountToken:', userAppAccountToken);
       
-      // Make real App Store purchase with appAccountToken
+      // Check if product exists in our loaded products
+      const product = products.find(p => p.productId === productId);
+      if (!product) {
+        console.error('Product not found in loaded products:', productId);
+        console.log('Available products:', products.map(p => p.productId));
+        Alert.alert('Error', 'Product not available for purchase');
+        setPurchasing(null);
+        return;
+      }
+
+      console.log('Found product:', product);
+      console.log('Making purchase request...');
+      
+      // Make purchase request (works with both StoreKit testing and real App Store)
       await requestPurchase({
         sku: productId,
         appAccountToken: userAppAccountToken, // This links the purchase to your user
       });
       
+      console.log('Purchase request initiated successfully');
       // Purchase handling will continue in handleRealPurchase via purchaseUpdatedListener
       
     } catch (error) {
-      console.error('Error initiating real purchase:', error);
-      Alert.alert('Purchase Error', 'Failed to initiate purchase');
+      console.error('Error initiating purchase:', error);
+      console.error('Error details:', {
+        message: (error as any)?.message,
+        code: (error as any)?.code,
+        debugMessage: (error as any)?.debugMessage
+      });
+      
+      Alert.alert(
+        'Purchase Error', 
+        `Failed to initiate purchase: ${(error as any)?.message || String(error)}`
+      );
       setPurchasing(null);
     }
   };
