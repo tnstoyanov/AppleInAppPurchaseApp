@@ -12,6 +12,7 @@
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		AE258E48DFD4EFBDDA556553 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		BD9E073B2E435C76002E2400 /* InAppPurchases.storekit in Resources */ = {isa = PBXBuildFile; fileRef = BD9E073A2E435C76002E2400 /* InAppPurchases.storekit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,7 +25,7 @@
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = AppleInAppPurchaseApp/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = AppleInAppPurchaseApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B5FF1369DC733DC5C577FDFB /* libPods-AppleInAppPurchaseApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AppleInAppPurchaseApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		BD1039152E3B87F1001ACE1C /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
+		BD9E073A2E435C76002E2400 /* InAppPurchases.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = InAppPurchases.storekit; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -71,7 +72,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				BD1039152E3B87F1001ACE1C /* Configuration.storekit */,
+				BD9E073A2E435C76002E2400 /* InAppPurchases.storekit */,
 				13B07FAE1A68108700A75B9A /* AppleInAppPurchaseApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
@@ -160,6 +161,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BD9E073B2E435C76002E2400 /* InAppPurchases.storekit in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				AE258E48DFD4EFBDDA556553 /* PrivacyInfo.xcprivacy in Resources */,

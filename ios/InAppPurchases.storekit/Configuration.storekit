@@ -9,7 +9,7 @@
       }
     ]
   },
-  "identifier" : "5BE7E316",
+  "identifier" : "A8C102C6",
   "nonRenewingSubscriptions" : [
 
   ],
@@ -17,83 +17,86 @@
     {
       "displayPrice" : "200.00",
       "familyShareable" : false,
-      "internalID" : "FD82F5F8",
+      "internalID" : "5803349C",
       "localizations" : [
         {
-          "description" : "Perfect to get you started",
-          "displayName" : "Beginner Package",
+          "description" : "",
+          "displayName" : "",
           "locale" : "en_US"
         }
       ],
       "productID" : "com.tiebreak.appleiapapp.beginner",
+      "promotionalImageID" : "C60D8FBD",
       "referenceName" : "Beginner Package",
       "type" : "NonConsumable"
     },
     {
       "displayPrice" : "449.99",
       "familyShareable" : false,
-      "internalID" : "A0326CA3",
+      "internalID" : "50491E7E",
       "localizations" : [
         {
-          "description" : "Great for intermediate users",
-          "displayName" : "Intermediate Package",
+          "description" : "",
+          "displayName" : "",
           "locale" : "en_US"
         }
       ],
       "productID" : "com.tiebreak.appleiapapp.intermediate",
+      "promotionalImageID" : "587C7512",
       "referenceName" : "Intermediate Package",
       "type" : "NonConsumable"
     },
     {
       "displayPrice" : "749.99",
       "familyShareable" : false,
-      "internalID" : "17B813E8",
+      "internalID" : "C7D91A07",
       "localizations" : [
         {
-          "description" : "Great for traders",
-          "displayName" : "Trader Package",
+          "description" : "",
+          "displayName" : "",
           "locale" : "en_US"
         }
       ],
       "productID" : "com.tiebreak.appleiapapp.trader",
+      "promotionalImageID" : "7B60DBE3",
       "referenceName" : "Trader Package",
       "type" : "NonConsumable"
     },
     {
       "displayPrice" : "1000.00",
       "familyShareable" : false,
-      "internalID" : "4F408C7E",
+      "internalID" : "9E4D2EEC",
       "localizations" : [
         {
-          "description" : "Great for advanced users",
-          "displayName" : "Elite Package",
+          "description" : "",
+          "displayName" : "",
           "locale" : "en_US"
         }
       ],
       "productID" : "com.tiebreak.appleiapapp.elite",
+      "promotionalImageID" : "E518B156",
       "referenceName" : "Elite Package",
       "type" : "NonConsumable"
     },
     {
       "displayPrice" : "1199.99",
       "familyShareable" : false,
-      "internalID" : "D0E80AC8",
+      "internalID" : "0E893677",
       "localizations" : [
         {
-          "description" : "Great for expert users",
-          "displayName" : "Expert Package",
+          "description" : "",
+          "displayName" : "",
           "locale" : "en_US"
         }
       ],
       "productID" : "com.tiebreak.appleiapapp.expert",
+      "promotionalImageID" : "82752303",
       "referenceName" : "Expert Package",
       "type" : "NonConsumable"
     }
   ],
   "settings" : {
     "_failTransactionsEnabled" : false,
-    "_locale" : "en_US",
-    "_storefront" : "USA",
     "_storeKitErrors" : [
       {
         "current" : null,

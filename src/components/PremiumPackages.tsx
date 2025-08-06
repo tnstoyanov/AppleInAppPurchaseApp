@@ -78,7 +78,7 @@ export const PremiumPackages: React.FC = () => {
   const userAppAccountToken = 'apptoken-user-12345-uuid-v4'; // UUID for this user
   
   // Toggle between mock and real App Store testing
-  const USE_REAL_APP_STORE = true; // ✅ ENABLED for physical device testing
+  const USE_REAL_APP_STORE = false; // ✅ DISABLED - Using mock testing for development
 
   useEffect(() => {
     if (USE_REAL_APP_STORE) {
@@ -419,15 +419,20 @@ export const PremiumPackages: React.FC = () => {
       const mockJWT = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.${base64urlPayload}.mockSignatureWithUserIdAndAppAccountToken`;
       
       // Step 2: Send the notification to your server (simulating Apple's webhook)
-      const notificationUrl = 'http://10.131.78.91:9001/appstore/notification';
-      console.log('Sending App Store Server Notification V2 to server...');
+      const notificationUrl = 'https://apple-1mbzai8v1-tony-stoyanovs-projects.vercel.app/appstore/notification';
+      console.log('Sending App Store Server Notification V2 to Vercel server...');
       console.log('AppAccountToken:', userAppAccountToken);
+      console.log('Notification URL:', notificationUrl);
       
-      await fetch(notificationUrl, {
+      const notificationResponse = await fetch(notificationUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ signedPayload: mockJWT }),
       });
+      
+      console.log('Server notification response:', notificationResponse.status, notificationResponse.statusText);
+      const responseText = await notificationResponse.text();
+      console.log('Server response body:', responseText);
       
       // Step 3: Wait a moment for server processing, then check entitlement
       setTimeout(async () => {
